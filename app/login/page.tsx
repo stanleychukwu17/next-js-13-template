@@ -1,4 +1,25 @@
+"use client"
 import { useState } from "react"
+
+
+import MessageComp, {MessageCompProps} from "../components/Message/MessageComp";
+
+// gets the backEnd url from our .env file
+const backEndPort = process.env.BACKEND_PORT;
+
+type LoginForRHF = {
+    username: string
+    password: string
+}
+
+type RegisterRHF = {
+    name: string
+    username: string
+    email: string
+    gender: 'male'|'female'
+    password: string
+    confirm_password: string
+}
 
 export default function LoginPage() {
     const [isLoading1, setIsLoading1] = useState<boolean>(false) // used for login
