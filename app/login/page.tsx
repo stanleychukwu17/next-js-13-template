@@ -5,6 +5,7 @@ import {useForm, SubmitHandler} from "react-hook-form"
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from "../redux/hook";
 import { updateUser } from '../redux/features/userSlice';
+import { BACKEND_PORT as backEndPort } from '@/my.config';
 
 import MessageComp, {MessageCompProps} from "../components/Message/MessageComp";
 
@@ -12,8 +13,6 @@ import './page.scss'
 
 
 
-// gets the backEnd url from our .env file
-const backEndPort = process.env.BACKEND_PORT;
 
 type LoginForRHF = {
     username: string
@@ -44,23 +43,24 @@ export default function LoginPage() {
     const submitLogin: SubmitHandler<LoginForRHF> = (data) => {
         axios.post(`${backEndPort}/users/login`, data, {headers: {'Content-Type': 'application/json'}})
         .then((res) => {
-            if(res.data.msg === 'okay') {
-                localStorage.setItem('userDts', JSON.stringify(res.data));
-                dispatch(updateUser({loggedIn: 'yes', ...res.data}))
+            console.log(res.data)
+            // if(res.data.msg === 'okay') {
+            //     localStorage.setItem('userDts', JSON.stringify(res.data));
+            //     dispatch(updateUser({loggedIn: 'yes', ...res.data}))
 
-                // waits a little bit so that redux can finish it's thing and they i can redirect to the home page
-                setTimeout(() => {
-                    route.push('/')
-                }, 500)
+            //     // waits a little bit so that redux can finish it's thing and they i can redirect to the home page
+            //     setTimeout(() => {
+            //         route.push('/')
+            //     }, 500)
 
-                // clears all of the input field for login
-                Object.keys(data).forEach((item) => {
-                    loginSetValue(item as "username" | "password", "") // RHF hook used here
-                })
-            } else {
-                setShowAlert(true)
-                setAlertMsg({'msg_type':res.data.msg, 'msg_dts':res.data.cause})
-            }
+            //     // clears all of the input field for login
+            //     Object.keys(data).forEach((item) => {
+            //         loginSetValue(item as "username" | "password", "") // RHF hook used here
+            //     })
+            // } else {
+            //     setShowAlert(true)
+            //     setAlertMsg({'msg_type':res.data.msg, 'msg_dts':res.data.cause})
+            // }
             setIsLoading1(false)
         })
         .catch((err) => {
