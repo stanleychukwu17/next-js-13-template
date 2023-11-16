@@ -19,7 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en">
             <body className={inter.className}>
                 <ReduxProvider>
-                    {children}
+                    <main className='max-container'>
+                        {children}
+                    </main>
                 </ReduxProvider>
             </body>
         </html>
