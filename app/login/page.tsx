@@ -43,24 +43,23 @@ export default function LoginPage() {
     const submitLogin: SubmitHandler<LoginForRHF> = (data) => {
         axios.post(`${backEndPort}/users/login`, data, {headers: {'Content-Type': 'application/json'}})
         .then((res) => {
-            console.log(res.data)
-            // if(res.data.msg === 'okay') {
-            //     localStorage.setItem('userDts', JSON.stringify(res.data));
-            //     dispatch(updateUser({loggedIn: 'yes', ...res.data}))
+            if(res.data.msg === 'okay') {
+                localStorage.setItem('userDts', JSON.stringify(res.data));
+                dispatch(updateUser({loggedIn: 'yes', ...res.data}))
 
-            //     // waits a little bit so that redux can finish it's thing and they i can redirect to the home page
-            //     setTimeout(() => {
-            //         route.push('/')
-            //     }, 500)
+                // waits a little bit so that redux can finish it's thing and they i can redirect to the home page
+                setTimeout(() => {
+                    route.push('/')
+                }, 500)
 
-            //     // clears all of the input field for login
-            //     Object.keys(data).forEach((item) => {
-            //         loginSetValue(item as "username" | "password", "") // RHF hook used here
-            //     })
-            // } else {
-            //     setShowAlert(true)
-            //     setAlertMsg({'msg_type':res.data.msg, 'msg_dts':res.data.cause})
-            // }
+                // clears all of the input field for login
+                Object.keys(data).forEach((item) => {
+                    loginSetValue(item as "username" | "password", "") // RHF hook used here
+                })
+            } else {
+                setShowAlert(true)
+                setAlertMsg({'msg_type':res.data.msg, 'msg_dts':res.data.cause})
+            }
             setIsLoading1(false)
         })
         .catch((err) => {
@@ -93,9 +92,6 @@ export default function LoginPage() {
 
     return (
         <div className="block relative my-14 padding-x">
-            <div className="hidden">
-                {/* <Header /> */}
-            </div>
             {/* {showAlert && <MessageComp {...alertMsg} closeAlert={setShowAlert} />} */}
 
             <div className="pb-10 text-4xl">Hi there!</div>
@@ -131,21 +127,21 @@ export default function LoginPage() {
                             <div className="inpTitle font-bold">name</div>
                             <div className="inpInput">
                                 <input type="text" {...registerReg("name", {required: true})} />
-                                {/* {regError.name && <p>This field is required!!!</p>} */}
+                                {regError.name && <p>This field is required!!!</p>}
                             </div>
                         </div>
                         <div className="inputCover">
                             <div className="inpTitle font-bold">username</div>
                             <div className="inpInput">
                                 <input type="text" {...registerReg("username", {required: true})} />
-                                {/* {regError.username && <p>This field is required!!!</p>} */}
+                                {regError.username && <p>This field is required!!!</p>}
                             </div>
                         </div>
                         <div className="inputCover">
                             <div className="inpTitle font-bold">email</div>
                             <div className="inpInput">
                                 <input type="text" {...registerReg("email", {required: true})} />
-                                {/* {regError.email && <p>This field is required!!!</p>} */}
+                                {regError.email && <p>This field is required!!!</p>}
                             </div>
                         </div>
                         <div className="inputCover">
@@ -156,26 +152,26 @@ export default function LoginPage() {
                                     <option value="male">male</option>
                                     <option value="female">female</option>
                                 </select>
-                                {/* {regError.gender && <p>This field is required!!!</p>} */}
+                                {regError.gender && <p>This field is required!!!</p>}
                             </div>
                         </div>
                         <div className="inputCover">
                             <div className="inpTitle">Password</div>
                             <div className="inpInput">
                                 <input type="password" {...registerReg("password", {required: true})} />
-                                {/* {regError.password && <p>This field is required!!!</p>} */}
+                                {regError.password && <p>This field is required!!!</p>}
                             </div>
                         </div>
                         <div className="inputCover">
                             <div className="inpTitle">Re-enter Password</div>
                             <div className="inpInput">
                                 <input type="password" {...registerReg("confirm_password", {required: true})} />
-                                {/* {regError.confirm_password && <p>This field is required!!!</p>} */}
+                                {regError.confirm_password && <p>This field is required!!!</p>}
                             </div>
                         </div>
                         <div className="btnCvr">
-                            {/* {!isLoading2 && <button type="submit">Register</button>} */}
-                            {/* {isLoading2 && <p>Loading...</p>} */}
+                            {!isLoading2 && <button type="submit">Register</button>}
+                            {isLoading2 && <p>Loading...</p>}
                         </div>
                     </form>
                 </div>

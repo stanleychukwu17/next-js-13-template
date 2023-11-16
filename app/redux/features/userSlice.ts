@@ -5,6 +5,8 @@ export type userDetailsType = {
     name?:string;
     session_fid?:number;
     loggedIn?:'yes'|'no';
+    refreshToken?: string
+    accessToken?: string
 }
 
 // initial state if the slice
