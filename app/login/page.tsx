@@ -8,6 +8,8 @@ import { updateUser } from '../redux/features/userSlice';
 
 import MessageComp, {MessageCompProps} from "../components/Message/MessageComp";
 
+import './page.scss'
+
 
 
 // gets the backEnd url from our .env file
