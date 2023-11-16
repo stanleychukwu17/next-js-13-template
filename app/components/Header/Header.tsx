@@ -74,6 +74,7 @@ export default function Header() {
     const reduxDispatch = useAppDispatch()
     const route = useRouter()
 
+    // console.log(userDts, '\n', userInfo)
     useLayoutEffect(() => {
         if (userDts.loggedIn === 'yes' && userInfo.loggedIn === 'no') {
             reduxDispatch(updateUser(userDts))

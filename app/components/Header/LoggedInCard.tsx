@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import Link from "next/link"
 import { useAppSelector } from "../../redux/hook"
 
 export default function LoggedInCard() {
@@ -9,7 +9,7 @@ export default function LoggedInCard() {
             <div className="">
                 <div className="capitalize">{userInfo.name}</div>
                 <div className="text-sm text-[#0056b6] font-bold">
-                    <Link to="/logout">Logout</Link>
+                    <Link href="/logout">Logout</Link>
                 </div>
             </div>
         </div>
