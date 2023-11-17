@@ -1,3 +1,4 @@
+'use client'
 import {BsCheckCircle, BsExclamationCircle} from 'react-icons/bs'
 import {AiOutlineClose} from 'react-icons/ai'
 import { useCallback, useEffect } from 'react';

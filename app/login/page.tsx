@@ -1,6 +1,6 @@
 "use client"
 import axios from 'axios';
-import {useLayoutEffect, useState} from "react";
+import {useEffect, useLayoutEffect, useState} from "react";
 import {useForm, SubmitHandler} from "react-hook-form"
 import { useRouter } from 'next/navigation';
 import { useAppDispatch, useAppSelector } from "../redux/hook";
@@ -92,7 +92,7 @@ export default function LoginPage() {
 
     return (
         <div className="block relative my-14 padding-x">
-            {/* {showAlert && <MessageComp {...alertMsg} closeAlert={setShowAlert} />} */}
+            {showAlert && <MessageComp {...alertMsg} closeAlert={setShowAlert} />}
 
             <div className="pb-10 text-4xl">Hi there!</div>
             <div className="ovrCover flex">

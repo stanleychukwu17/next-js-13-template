@@ -5,14 +5,16 @@ export type userDetailsType = {
     name?:string;
     session_fid?:number;
     loggedIn?:'yes'|'no';
-    refreshToken?: string
-    accessToken?: string
+    refreshToken?: string;
+    accessToken?: string;
+    must_logged_in_to_view_this_page?: 'yes'|'no';
 }
 
 // initial state if the slice
 const initialState: userDetailsType = {
     name: '',
-    loggedIn: 'no'
+    loggedIn: 'no',
+    must_logged_in_to_view_this_page: 'no',
 };
 
 // Create a slice

@@ -5,12 +5,13 @@ import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "../../redux/hook";
 import { updateUser, userDetailsType } from "../../redux/features/userSlice";
 import { BACKEND_PORT as backEndPort } from "@/my.config";
+import Link from "next/link";
 
 import LoggedInCard from "./LoggedInCard";
 import LoggedOutCard from "./LoggedOutCard";
 
 
-//--start-- checks to see if there are any stored information about the user in the user's localStorage space
+//--START-- checks to see if there are any stored information about the user in the user's localStorage space
 let userDts: userDetailsType = {loggedIn: 'no'}
 try {
     const cached_user_dts  = window.localStorage.getItem('userDts') // the user details stored to the localStorage whenever a user logs in
@@ -23,16 +24,16 @@ try {
         userDts = {...userDts, ...cached_user_parsed}
     }
 } catch (err) {}
-//--end--
+//--END--
 
-//--start-- validates the accessToken and Refresh token every 24_hour
+//--START-- validates the accessToken and Refresh token every 24_hour
 function run_access_token_health_check () {
     axios.post(`${backEndPort}/healthCheck/accessToken`, userDts, {headers: {'Content-Type': 'application/json'}})
     .then(re => {
         // update the lastTime checked to be the current time
         localStorage.setItem('last_24hr_check', `${new Date()}`)
 
-        // the below means the accessToken has expired and the refreshToken has also expired
+        // if true, then it means the accessToken has expired and the refreshToken has also expired
         if (re.data.msg === 'bad' && re.data.action === 'logout') {
             location.href = '/logout'
             return true;
@@ -65,7 +66,7 @@ try {
         localStorage.setItem('last_24hr_check', `${current_time}`)
     }
 } catch (err) {}
-//--end--
+//--END--
 
 
 
@@ -80,30 +81,19 @@ export default function Header() {
             reduxDispatch(updateUser(userDts))
         }
 
-        // if (props.must_be_logged_in === true) {
-        //     route.push('/login')
-        // }
-    }, [route, reduxDispatch, userInfo.loggedIn])
+        if (userInfo.must_logged_in_to_view_this_page === 'yes') {
+            route.push('/login')
+        }
+    }, [route, reduxDispatch, userInfo.must_logged_in_to_view_this_page, userInfo.loggedIn])
 
 
     return (
         <header className="flex justify-between items-center py-5 px-5 bg-[#e9f2ff]">
-            <div className="text-2xl font-bold">TODO</div>
-            <div className="">
-                <div className="">
-                    <div className="">
-                        <input
-                            type="text"
-                            className="px-3 py-4 rounded shadow-inner border w-[500px]"
-                            placeholder="Search items in TODO"
-                        />
-                    </div>
-                </div>
+            <div className="text-2xl font-bold">
+                <Link href="/">NEXT.</Link>
             </div>
-            
             {userInfo.loggedIn === 'no' && <LoggedOutCard />}
             {userInfo.loggedIn === 'yes' && <LoggedInCard />}
-            
         </header>
     )
 }
