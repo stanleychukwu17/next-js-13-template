@@ -41,6 +41,8 @@ export default function LoginPage() {
     const { register: registerReg, handleSubmit: handleRegisterSubmit, setValue: regSetValue, formState: {errors:regError} } = useForm<RegisterRHF>()
 
     const submitLogin: SubmitHandler<LoginForRHF> = (data) => {
+        setIsLoading1(true)
+
         axios.post(`${backEndPort}/users/login`, data, {headers: {'Content-Type': 'application/json'}})
         .then((res) => {
             if(res.data.msg === 'okay') {
