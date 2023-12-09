@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import ReduxProvider from './redux/provider'
+import { ApolloWrapper } from './graphql/apollo-wrapper'
 import Header from './components/Header/Header'
 
 // import fonts
@@ -20,12 +21,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body className={inter.className}>
-                <ReduxProvider>
-                    <Header />
-                    <main className='max-container'>
-                        {children}
-                    </main>
-                </ReduxProvider>
+                <ApolloWrapper>
+                    <ReduxProvider>
+                        <Header />
+                        <main className='max-container'>
+                            {children}
+                        </main>
+                    </ReduxProvider>
+                </ApolloWrapper>
             </body>
         </html>
     )
