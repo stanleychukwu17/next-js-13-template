@@ -2,9 +2,10 @@
 
 import { ApolloClient, ApolloLink, HttpLink, } from "@apollo/client";
 import { ApolloNextAppProvider, NextSSRInMemoryCache, SSRMultipartLink, NextSSRApolloClient } from "@apollo/experimental-nextjs-app-support/ssr";
+import { GraphQL_PORT } from "@/my.config";
 
 function makeClient() {
-    const httpLink = new HttpLink({uri: "https://main--spacex-l4uc6p.apollographos.net/graphql"});
+    const httpLink = new HttpLink({uri: GraphQL_PORT});
 
     return new NextSSRApolloClient({
         cache: new NextSSRInMemoryCache(),
