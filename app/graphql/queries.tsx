@@ -6,6 +6,8 @@ export const GET_ALL_THE_GAMES = gql`
             id
             title
             date_released
+            total_users_played
+            total_reviews
         }
     }
 `
