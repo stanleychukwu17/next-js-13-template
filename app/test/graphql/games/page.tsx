@@ -2,12 +2,50 @@
 import './page.scss'
 import { useQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { FaPencil, FaRegTrashCan  } from "react-icons/fa6";
+import { CiStar } from "react-icons/ci";
 
 import { GET_ALL_THE_GAMES } from '@/app/graphql/queries';
 import Link from 'next/link';
 
-// helper component
+type GamesProp = {
+    id: number
+    title: string
+    date_released: string
+}
 
+// helper component
+const GamesComponent = ({title, date_released}: GamesProp) => {
+
+    return (
+        <div className="py-5">
+            <div className="">
+                <div className="text-2xl px-2">{title}</div>
+                <div className="G_activitiesC py-2 text-sm flex">
+                    <div className="">{date_released}</div>
+                    <div className=""><Link href="/users_played">15users played</Link></div>
+                    <div className="">
+                        <Link href="/reviews" className='flex items-center space-x-1'>
+                            <span>
+                                <CiStar />
+                            </span>
+                            <span>45 reviews</span>
+                        </Link>
+                    </div>
+                </div>
+            </div>
+            <div className="G_workBtn">
+                <button className='hover:text-[#0056b6]'>
+                    <span><FaPencil /></span>
+                    <span>Edit game</span>
+                </button>
+                <button className='hover:text-[#df0e3a]'>
+                    <span><FaRegTrashCan /></span>
+                    <span>Delete game</span>
+                </button>
+            </div>
+        </div>
+    )
+}
 
 export default function GamesPage() {
     const {data, error, loading} = useQuery(GET_ALL_THE_GAMES)
@@ -16,26 +54,10 @@ export default function GamesPage() {
     return (
         <section className="GameMCvr flex">
             <div className="w-[70%]">
-                <div className="py-5">
-                    <div className="">
-                        <div className="text-2xl px-2">Grand theft auto part 2</div>
-                        <div className="G_activitiesC py-2 text-sm flex">
-                            <div className="">Oct 2022</div>
-                            <div className=""><Link href="/users_played">15users played</Link></div>
-                            <div className=""><Link href="/reviews">45 reviews</Link></div>
-                        </div>
-                    </div>
-                    <div className="G_workBtn">
-                        <button className='hover:text-[#0056b6]'>
-                            <span><FaPencil /></span>
-                            <span>Edit game</span>
-                        </button>
-                        <button className='hover:text-[#df0e3a]'>
-                            <span><FaRegTrashCan /></span>
-                            <span>Delete game</span>
-                        </button>
-                    </div>
-                </div>
+                {loading && <p className='text-2xl font-bold'>Loading...</p>}
+                {data && data.games.map((item: GamesProp) => {
+                    return (<GamesComponent key={item.id} {...item} />);
+                })}
             </div>
 
             <div className="w-[30%]">
