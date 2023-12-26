@@ -2,7 +2,11 @@ import { gql } from "@apollo/client";
 
 export const CREATE_THIS_NEW_GAME_RECORD = gql`
     mutation CREATE_THIS_NEW_GAME_RECORD_MUTATION ($title: String! $date: String!) {
-        
+        createGame(title:$title, date:$date) {
+            id
+            title
+            date_released
+        }
     }
 `
 

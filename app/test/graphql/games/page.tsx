@@ -8,7 +8,7 @@ import { CiStar } from "react-icons/ci";
 import './page.scss'
 
 import { GET_ALL_THE_GAMES } from '@/app/graphql/queries';
-import { UPDATE_THIS_GAME_DETAILS, DELETE_THIS_GAME } from '@/app/graphql/mutations';
+import { CREATE_THIS_NEW_GAME_RECORD, UPDATE_THIS_GAME_DETAILS, DELETE_THIS_GAME } from '@/app/graphql/mutations';
 import Link from 'next/link';
 
 type GamesProp = {
@@ -82,30 +82,55 @@ const GamesComponent = ({total_users_played, total_reviews, ...GamesProp}: Games
 }
 
 
+//--START-- of the main page component
 type add_new_game_form = {
     title: string
     date_released: string
 }
 export default function GamesPage() {
-    const {data, loading} = useQuery(GET_ALL_THE_GAMES) // get all the games
+    const {data, loading, refetch: refetch_all_the_games} = useQuery(GET_ALL_THE_GAMES) // get all the games
+    const [createNewGameMutation, {data: newGameData, loading: createNewGameLoading, error: errorInCreatingNewGame, reset: resetNewGameMutation}] = useMutation(CREATE_THIS_NEW_GAME_RECORD, {errorPolicy: 'all'}) // apollo-graphql mutation for creating a new game
+    const { register: registerGameInput, handleSubmit: handleNewGameSubmit, setValue: newGameSetValue, formState: {errors:newGameError} } = useForm<add_new_game_form>() // react-hook-form for creating a new game
 
-    const { register: registerGameInput, handleSubmit: handleNewGameSubmit, setValue: newGameSetValue, formState: {errors:newGameError} } = useForm<add_new_game_form>()
+    // clears the input field for creating a new game
+    const clear_the_input_fields = useCallback(() => {
+        newGameSetValue('title', '')
+        newGameSetValue('date_released', '')
+    }, [newGameSetValue])
 
+    // the react-hook-form submit handler, calls the mutation function to create a new game record
     const create_this_new_game_record: SubmitHandler<add_new_game_form> = (data) => {
-        // setIsLoading1(true)
+        // sends the new game to the graphql server to be saved
+        createNewGameMutation({variables:{title:data.title, date:data.date_released}})
+    }
+    
+    // if there are any errors from the backEnd when creating this game.. we want to gracefully handle the error (by alerting the error message to the user)
+    if (errorInCreatingNewGame) {
+        // console.log(errorInCreatingNewGame.message, errorInCreatingNewGame.graphQLErrors) // .graphQLErrors gives you more details about the error
+        alert(errorInCreatingNewGame.message)
+        resetNewGameMutation()
+        clear_the_input_fields();
+    }
 
-        console.log(data)
+    // if a new game was created successfully, we want to refetch the games
+    if (newGameData) {
+        refetch_all_the_games()
+        resetNewGameMutation()
+        clear_the_input_fields()
     }
 
     return (
         <section className="GameMCvr flex">
+            {/* --START-- below is the section where the list of games are displayed */}
             <div className="w-[70%]">
                 {loading && <p className='text-2xl font-bold'>Loading...</p>}
                 {data && data.games?.map((item: GamesProp) => {
                     return (<GamesComponent key={item.id} {...item} />);
                 })}
             </div>
+            {/* --END-- */}
 
+            {/* --START-- the form for adding a new game */}
             <div className="w-[30%]">
                 <div className="text-2xl font-medium">Add a new Game</div>
                 <div className="GInp_General">
@@ -114,22 +139,26 @@ export default function GamesPage() {
                             <div className="GInp_title">Game title</div>
                             <div className="GInp_input">
                                 <input type="text" className='w-[350px]' {...registerGameInput("title", { required: true, minLength: 5 })} />
-                                {newGameError.title && <p>This field is required with minimum of 5 letters</p>}
+                                {newGameError.title && <p className='text-sm font-semibold text-[#df0e3a] pt-1'>This field is required with minimum of 5 letters</p>}
                             </div>
                         </div>
                         <div className="GInp_cvr">
                             <div className="GInp_title">Release date</div>
                             <div className="GInp_input">
                                 <input type="text" {...registerGameInput("date_released", { required: true, minLength: 5 })} />
-                                {newGameError.date_released && <p>This field is required with minimum of 5 letters</p>}
+                                {newGameError.date_released && <p className='text-sm font-semibold text-[#df0e3a] pt-1'>This field is required with minimum of 5 letters</p>}
                             </div>
                         </div>
                         <div className="GInp_Btn GenBtn1">
-                            <button type="submit">Save new game </button>
+                            {
+                                createNewGameLoading ? (<button type="submit" className='opacity-50' disabled>Saving... </button>) : (<button type="submit">Save new game </button>)
+                            }
                         </div>
                     </form>
                 </div>
             </div>
+            {/* --END-- */}
         </section>
     )
 }
+// --END-- of the main page component
