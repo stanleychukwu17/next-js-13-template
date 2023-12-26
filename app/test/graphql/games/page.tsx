@@ -20,20 +20,20 @@ type GamesProp = {
 }
 
 // helper component
-const GamesComponent = ({total_users_played, total_reviews, ...GamesProp}: GamesProp) => {
+const GamesComponent = ({total_users_played, total_reviews, ...gameDts}: GamesProp) => {
     const [showEdit, setShowEdit] = useState<boolean>(false)
-    const [gameTitle, setGameTitle] = useState(GamesProp.title)
-    const [gameReleaseDate, setGameReleaseDate] = useState(GamesProp.date_released)
+    const [gameTitle, setGameTitle] = useState(gameDts.title)
+    const [gameReleaseDate, setGameReleaseDate] = useState(gameDts.date_released)
     const [updateGameDetails, {data:updateData, loading:updateLoading}] = useMutation(UPDATE_THIS_GAME_DETAILS)
     const [deleteGameRecord, {data, loading: deleteLoading}] = useMutation(DELETE_THIS_GAME)
 
     const saveTheUpdateOfThisGame = useCallback(() => {
-        updateGameDetails({variables:{id:GamesProp.id, title: gameTitle, date: gameReleaseDate}})
-    }, [gameTitle, gameReleaseDate, GamesProp.id, updateGameDetails])
+        updateGameDetails({variables:{id:gameDts.id, title: gameTitle, date: gameReleaseDate}})
+    }, [gameTitle, gameReleaseDate, gameDts.id, updateGameDetails])
 
     const deleteThisGameFromTheDb = useCallback(() => {
-        deleteGameRecord({variables:{id: GamesProp.id}})
-    }, [deleteGameRecord, GamesProp.id])
+        deleteGameRecord({variables:{id: gameDts.id}})
+    }, [deleteGameRecord, gameDts.id])
 
     return (
         <div className="py-5">
@@ -44,7 +44,7 @@ const GamesComponent = ({total_users_played, total_reviews, ...GamesProp}: Games
                         <div className="">{gameReleaseDate}</div>
                         <div className=""><Link href="/users_played">{total_users_played} users played</Link></div>
                         <div className="">
-                            <Link href="/reviews" className='flex items-center space-x-1'>
+                            <Link href={`/test/graphql/games/reviews/${gameDts.id}`} className='flex items-center space-x-1'>
                                 <span>
                                     <CiStar />
                                 </span>
