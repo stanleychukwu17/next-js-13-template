@@ -130,7 +130,7 @@ export default function GamesPage() {
             </div>
             {/* --END-- */}
 
-            {/* --START-- the form for adding a new game */}
+            {/* --START-- form for adding a new game */}
             <div className="w-[30%]">
                 <div className="text-2xl font-medium">Add a new Game</div>
                 <div className="GInp_General">
