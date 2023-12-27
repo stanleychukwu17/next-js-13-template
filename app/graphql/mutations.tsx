@@ -33,11 +33,9 @@ export const DELETE_THIS_GAME = gql`
 
 // --start-- for reviews
 export const ADD_NEW_REVIEW_FOR_THIS_GAME = gql`
-    mutation ADD_NEW_REVIEW_FOR_THIS_GAME_MUTATION ($title: String! $date: String!) {
-    createReview(title:$title, date:$date) {
+    mutation ADD_NEW_REVIEW_FOR_THIS_GAME_MUTATION ($info: NewReviewInput!) {
+    createReview(info: $info) {
         id
-        title
-        date_released
     }
 }
 `

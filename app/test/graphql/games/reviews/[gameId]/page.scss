@@ -1,17 +1,25 @@
 .reviewsSection {
     .RvwDtsCvr {
         .EchGameCvr {
+            display: block;
+            position: relative;
+            overflow: hidden;
+            padding: 20px 0;
+
             .it_fl {
                 float: left;
                 position: relative;
             }
 
             .profImg {
-                width: 55px;
-                height: 55px;
+                width: 50px;
+                height: 50px;
                 border-radius: 100px;
                 background-color: bisque;
-                border: 2px solid yellowgreen;
+                text-transform: uppercase;
+                text-align: center;
+                line-height: 50px;
+                font-weight: bold;
             }
         }
     }
